@@ -1,0 +1,10 @@
+temp
+__pycache__
+.vscode
+kernels
+torch
+.ipynb_checkpoints
+test.tsv
+train.tsv
+sample_submission.csv
+gridsearch.py
