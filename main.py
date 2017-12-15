@@ -19,7 +19,8 @@ class ComplexOut():
             self._file = open(self._file_name, 'w')
         else:
             self._file = None
-    
+        sys.stdout = self
+
     def write(self, text):
         self._original.write(text)
         if self._file:
@@ -76,7 +77,6 @@ if __name__ == '__main__':
     string_experiment = '%s%s%s' % (pipes, fit_params, args.model)
 
     complex_out = ComplexOut(string_experiment, force=args.force) 
-    sys.stdout = complex_out
     if complex_out.is_cached:
         complex_out.print_cache()
     else:
