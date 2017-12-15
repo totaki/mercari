@@ -1,3 +1,4 @@
+import hashlib
 import numpy as np
 from sklearn.metrics import mean_squared_log_error
 from sklearn.pipeline import Pipeline
@@ -36,6 +37,13 @@ def calc_metrics(x, y, model):
 def print_dict(dct):
     for k, v in dct.items():
         print('  %s: ' % k, v)
+
+
+def get_hash_params(*args):
+    string = ''.join([str(a) for a in args])
+    md5 = hashlib.md5()
+    md5.update(string.encode())
+    return md5.hexdigest()        
 
 
 def run(pipes, X_train, Y_train, X_test, Y_test, fit_params={}):

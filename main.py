@@ -1,6 +1,5 @@
 import sys
 import os
-import hashlib
 import datetime
 import pandas as pd
 import numpy as np
@@ -9,10 +8,8 @@ import utils
 
 class ComplexOut():
 
-    def __init__(self, string, force=False):
-        md5 = hashlib.md5()
-        md5.update(string.encode())
-        self._file_name = './results/%s.txt' % md5.hexdigest()[-8:]
+    def __init__(self, hash_string, force=False):
+        self._file_name = './results/%s.txt' % hash_string[-8:]
         self._original = sys.stdout
         
         if not os.path.exists(self._file_name) or force:
@@ -72,15 +69,14 @@ if __name__ == '__main__':
 
     experiment_module = importlib.import_module('models.%s' % args.model)
     np.random.seed(42)
-    X_train, X_test, pipes, fit_params = experiment_module.get_experiment(train_df, test_df)
-    
-    string_experiment = '%s%s%s' % (pipes, fit_params, args.model)
+    X_train, X_test, pipes, fit_params, hash_string = experiment_module.get_experiment(train_df, test_df)
+    complex_out = ComplexOut(hash_string, force=args.force) 
 
-    complex_out = ComplexOut(string_experiment, force=args.force) 
     if complex_out.is_cached:
         complex_out.print_cache()
     else:
         try:
+            print(experiment_module.__doc__)
             print(datetime.datetime.utcnow().isoformat())
             metrics, pipe = utils.run(pipes, X_train, Y_train, X_test, Y_test, fit_params=fit_params)
         except KeyboardInterrupt:
