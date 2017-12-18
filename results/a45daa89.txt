@@ -1,0 +1,35 @@
+
+Model for using predict on category, brand, shipping and condition id
+
+2017-12-18T09:19:18.448399
+
+
+Model:  CatBoostRegressor
+  train_dir:  ./temp
+  name:  experiment
+  random_strength:  1
+  has_time:  False
+  store_all_simple_ctr:  False
+  verbose:  False
+  use_best_model:  False
+  feature_border_type:  MinEntropy
+  loss_function:  RMSE
+  rsm:  1
+  l2_leaf_reg:  3
+  depth:  6
+  learning_rate:  0.03
+  iterations:  500
+
+
+Fit params:
+  cat__cat_features:  [0, 1, 2, 3]
+
+
+Run:
+  fiting
+  testing
+
+
+Metrics:
+  0.307457889331
+

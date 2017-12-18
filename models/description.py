@@ -1,21 +1,15 @@
 """
 Model for using predict on item description
 """
-from utils import get_hash_params
+from models.base import Experiment
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDRegressor
 
 
-def get_experiment(train_df, test_df):
+def get_experiment():
     fit_params = {}
-    pipe = [
+    pipes = [
         ('cv', TfidfVectorizer(stop_words='english', max_df=0.6, norm='l2')),
         ('sgdr', SGDRegressor(max_iter=50, random_state=42))
     ]
-    return (
-        train_df['item_description'],
-        test_df['item_description'],
-        pipe,
-        fit_params,
-        get_hash_params(pipe, {}, __doc__)
-    )
+    return Experiment(df_process=lambda df: df['item_description'], pipes=pipes, desctiption=__doc__)

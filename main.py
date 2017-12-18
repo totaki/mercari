@@ -69,8 +69,8 @@ if __name__ == '__main__':
 
     experiment_module = importlib.import_module('models.%s' % args.model)
     np.random.seed(42)
-    X_train, X_test, pipes, fit_params, hash_string = experiment_module.get_experiment(train_df, test_df)
-    complex_out = ComplexOut(hash_string, force=args.force) 
+    experiment = experiment_module.get_experiment()
+    complex_out = ComplexOut(experiment.hash, force=args.force) 
 
     if complex_out.is_cached:
         complex_out.print_cache()
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         try:
             print(experiment_module.__doc__)
             print(datetime.datetime.utcnow().isoformat())
-            metrics, pipe = utils.run(pipes, X_train, Y_train, X_test, Y_test, fit_params=fit_params)
+            metrics, pipe = utils.run(experiment, train_df, Y_train, test_df, Y_test)
         except KeyboardInterrupt:
             complex_out.delete_current_cache_item()
             print('\nForce stop from KeyboardInterrupt')

@@ -46,22 +46,22 @@ def get_hash_params(*args):
     return md5.hexdigest()        
 
 
-def run(pipes, X_train, Y_train, X_test, Y_test, fit_params={}):
-    pipe = Pipeline(pipes)
+def run(experiment, X_train, Y_train, X_test, Y_test):
+    pipe = experiment.model
     print('\n')
     for _, model in pipe.named_steps.items():
         print('Model: ', model.__class__.__name__)
         print_dict(model.get_params())
         print('\n')
     print('Fit params:')
-    print_dict(fit_params)
+    print_dict(experiment.fit_params)
     print('\n')
     
     print('Run:')
     print('  fiting')
-    pipe.fit(X_train, Y_train, **fit_params)
+    pipe.fit(experiment.convert_dfs(X_train), Y_train, **experiment.fit_params)
     print('  testing')
-    metrics = calc_metrics(X_test, Y_test, pipe)
+    metrics = calc_metrics(experiment.convert_dfs(X_test), Y_test, pipe)
     print('\n')
     
     print('Metrics:')
